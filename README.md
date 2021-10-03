@@ -64,10 +64,10 @@ The same logical business rules apply - in addition any films that have already 
 If the customer doesn’t have at least 1 film recommendation - they also need to be flagged with a separate actor exclusion flag.
 
 ## 📊 Data Exploration
+Firstly, we start with data exploration. There are 7 tables in total viz ```rental```, ```inventory```, ```film```, ```film_category```, ```category```, ```film_actor``` and ```actor```. The Entity Relationship diagram is below.
+
 <p align="center">
-  
-<img src="https://github.com/eluah/marketing-analytics-case-study/blob/main/img/dvd_rental_erd.png" alt="erd">
-  
+    <img src="https://github.com/eluah/marketing-analytics-case-study/blob/main/img/dvd_rental_erd.png" alt="erd">
 </p>
 
 ## 📌 Data Analysis
