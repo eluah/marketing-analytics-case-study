@@ -20,7 +20,7 @@ The following email template has been shared to us by the marketing team at DVD 
 
 <p align="center">
   
-<img src="img/dvd-rental-co.png" alt="email-template" width="700px">
+<img src="https://github.com/eluah/marketing-analytics-case-study/blob/main/img/dvd_rental_co.png" alt="email-template" width="700px">
   
 </p>
 
