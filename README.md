@@ -40,7 +40,6 @@ Any customer which do not have any film recommendations for either category must
 
 ### Requirement 3 & 4
 #### Individual Customer Insights
-
 The number of films watched by each customer in their top 2 categories is required as well as some specific insights.
 
 > For the 1st category, the marketing requires the following insights (requirement 3):
@@ -56,7 +55,6 @@ The number of films watched by each customer in their top 2 categories is requir
 
 ### Requirement 5
 #### Favorite Actor Recommendations
-
 Along with the top 2 categories, marketing has also requested top actor film recommendations where up to 3 more films are included in the recommendations list as well as the count of films by the top actor.
 
 We have been given guidance by marketing to choose the actors in alphabetical order should there be any ties - i.e. if the customer has seen 5 Brad Pitt films vs 5 George Clooney films - Brad Pitt will be chosen instead of George Clooney.
