@@ -64,7 +64,11 @@ The same logical business rules apply - in addition any films that have already 
 If the customer doesn’t have at least 1 film recommendation - they also need to be flagged with a separate actor exclusion flag.
 
 ## 📊 Data Exploration
-
+<p align="center">
+  
+<img src="https://github.com/eluah/marketing-analytics-case-study/blob/main/img/dvd_rental_erd.png" alt="erd">
+  
+</p>
 
 ## 📌 Data Analysis
 
