@@ -4,10 +4,10 @@
 ## 📕 **Table of contents**
 <!--ts-->
    * 🛠️ [Overview](#️-overview)
-   * 📊 [Data Exploration](#data-exploration)
-   * 📌 [Data Analysis](#data-analysis)
-   * 🧲 [Join Implementation](#join-implementation)
-   * 💥 [Problem Solving](#problem-solving)
+   * 📊 [Data Exploration](-#data-exploration)
+   * 📌 [Data Analysis](#-data-analysis)
+   * 🧲 [Join Implementation](#-join-implementation)
+   * 💥 [Problem Solving](#-problem-solving)
    * 🚀 [Solutions](#-solutions)
 
 
@@ -71,10 +71,10 @@ If the customer doesn’t have at least 1 film recommendation - they also need t
 ## 📌 Data Analysis
 
 
-🧲 Join Implementation
+## 🧲 Join Implementation
 
 
-💥 Problem Solving
+## 💥 Problem Solving
 
 
 ## 🚀 Solutions
