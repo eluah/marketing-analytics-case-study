@@ -20,7 +20,7 @@ The following email template has been shared to us by the marketing team at DVD 
 
 <p align="center">
   
-![dvd_rental_co](./img/dvd_rental_co.png)
+<img src="img/dvd-rental-co.png" alt="email-template" width="700px">
   
 </p>
 
