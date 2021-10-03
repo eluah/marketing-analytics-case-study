@@ -19,7 +19,7 @@ We have been asked to support the customer analytics team at DVD Rental Co who h
 The following email template has been shared to us by the marketing team at DVD Rental Co. They need our help in order to start a personalized marketing campaign.
 
 <p align="center">
-    <img src="img\dvd-rental-co.png" alt="email-template" width="500px">
+![dvd_rental_co](./img/dvd_rental_co.png)
 </p>
 
 
