@@ -108,15 +108,136 @@ LIMIT 5;
 
 ## 1.3 film table
 
+This table contains the film informations and will be the main table we will be using to join other tables together. We will ignore the last 2 columns for the purpose of this study. 
+
+```sql
+SELECT 
+  film_id,
+  title,
+  description,
+  release_year,
+  language_id,
+  rental_duration,
+  rental_rate,
+  length,
+  replacement_cost,
+  rating,
+  last_update
+FROM dvd_rentals.film
+LIMIT 5;
+```
+
+*Output:*
+
+| film_id | title            | description                                                                                                           | release_year | language_id | rental_duration | rental_rate | length | replacement_cost | rating | last_update              |
+|---------|------------------|-----------------------------------------------------------------------------------------------------------------------|--------------|-------------|-----------------|-------------|--------|------------------|--------|--------------------------|
+| 1       | ACADEMY DINOSAUR | A Epic Drama of a Feminist And a Mad Scientist who must Battle a Teacher in The Canadian Rockies                      | 2006         | 1           | 6               | 0.99        | 86     | 20.99            | PG     | 2006-02-15T05:03:42.000Z |
+| 2       | ACE GOLDFINGER   | A Astounding Epistle of a Database Administrator And a Explorer who must Find a Car in Ancient China                  | 2006         | 1           | 3               | 4.99        | 48     | 12.99            | G      | 2006-02-15T05:03:42.000Z |
+| 3       | ADAPTATION HOLES | A Astounding Reflection of a Lumberjack And a Car who must Sink a Lumberjack in A Baloon Factory                      | 2006         | 1           | 7               | 2.99        | 50     | 18.99            | NC-17  | 2006-02-15T05:03:42.000Z |
+| 4       | AFFAIR PREJUDICE | A Fanciful Documentary of a Frisbee And a Lumberjack who must Chase a Monkey in A Shark Tank                          | 2006         | 1           | 5               | 2.99        | 117    | 26.99            | G      | 2006-02-15T05:03:42.000Z |
+| 5       | AFRICAN EGG      | A Fast-Paced Documentary of a Pastry Chef And a Dentist who must Pursue a Forensic Psychologist in The Gulf of Mexico | 2006         | 1           | 6               | 2.99        | 130    | 22.99            | G      | 2006-02-15T05:03:42.000Z |
+
+
 ## 1.4 film_category table
 
+The 4th table in the ERD is film_category which shows the relationship between film_id and category_id.
+
+```sql
+SELECT * 
+FROM dvd_rentals.film_category
+LIMIT 5;
+```
+
+| film_id | category_id | last_update              |
+|---------|-------------|--------------------------|
+| 1       | 6           | 2006-02-15T05:07:09.000Z |
+| 2       | 11          | 2006-02-15T05:07:09.000Z |
+| 3       | 6           | 2006-02-15T05:07:09.000Z |
+| 4       | 11          | 2006-02-15T05:07:09.000Z |
+| 5       | 8           | 2006-02-15T05:07:09.000Z |
 
 ## 1.5 category table
 
+The 5th table in the ERD is the category table which simply contains a one to one mapping between category_id and the name of each category.
+
+```sql
+SELECT * 
+FROM dvd_rentals.category
+LIMIT 5;
+```
+
+*Output:*
+
+| category_id | name        | last_update              |
+|-------------|-------------|--------------------------|
+| 1           | Action      | 2006-02-15T04:46:27.000Z |
+| 2           | Animation   | 2006-02-15T04:46:27.000Z |
+| 3           | Children    | 2006-02-15T04:46:27.000Z |
+| 4           | Classics    | 2006-02-15T04:46:27.000Z |
+| 5           | Comedy      | 2006-02-15T04:46:27.000Z |
+
+We will check the total categories as well.
+
+```sql
+SELECT 
+  COUNT(DISTINCT category_id)
+FROM dvd_rentals.category;
+```
+
+*Output:*
+
+| count |
+|-------|
+|  16   |
 
 ## 1.6 film_actor table
+
+The 6th table in our ERD is film_actor which shows actors who appeared in each film based off related actor_id and film_id values.
+
+```sql
+SELECT *
+FROM dvd_rentals.film_actor
+WHERE actor_id = 1
+LIMIT 5;
+```
+
+*Output:*
+
+| actor_id	| film_id | last_update|
+|----------|---------|--------------------------|
+|1	|1|	2006-02-15 05:05:03|
+|1	|23|	2006-02-15 05:05:03|
+|1	|25|	2006-02-15 05:05:03|
+|1	|106|	2006-02-15 05:05:03|
+|1	|140|	2006-02-15 05:05:03|
 
 
 ## 1.7 actor table
 
+```sql
+SELECT *
+FROM dvd_rentals.actor
+LIMIT 5;
+```
 
+*Output:*
+
+| actor_id | first_name | last_name    | last_update              |
+|----------|------------|--------------|--------------------------|
+| 1        | PENELOPE   | GUINESS      | 2006-02-15T04:34:33.000Z |
+| 2        | NICK       | WAHLBERG     | 2006-02-15T04:34:33.000Z |
+| 3        | ED         | CHASE        | 2006-02-15T04:34:33.000Z |
+| 4        | JENNIFER   | DAVIS        | 2006-02-15T04:34:33.000Z |
+| 5        | JOHNNY     | LOLLOBRIGIDA | 2006-02-15T04:34:33.000Z |
+
+```sql
+SELECT
+  COUNT(DISTINCT actor_id)
+FROM dvd_rentals.actor;
+```
+
+*Output:*
+
+| count |
+|-------|
+|  200  |
