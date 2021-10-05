@@ -70,14 +70,27 @@ Firstly, we start with data exploration. There are 7 tables in total viz ```rent
     <img src="https://github.com/eluah/marketing-analytics-case-study/blob/main/img/dvd_rental_erd.png" alt="erd">
 </p>
 
+### Click to view 👇:
+https://github.com/eluah/marketing-analytics-case-study/blob/main/Data%20Exploration/README.MD
+
 ## 📌 Data Analysis
+
+### Click to view 👇:
 
 
 ## 🧲 Join Implementation
 
+Next, we start implementing the table joins which will then help us to start the problem solving. From the analysis section, we have come to conclusion to the following join table sequence.
+
+### Click to view 👇:
+
 
 ## 💥 Problem Solving
 
+### Click to view 👇:
+
 
 ## 🚀 Solutions
+
+### Click to view 👇:
 
