@@ -46,7 +46,7 @@ https://github.com/eluah/marketing-analytics-case-study/blob/main/Data%20Explora
 
 ## 📌 Data Analysis
 
-Based on the ERD above, the key columns we will need to use for table joins are: ```rental.customer_id```, ```flim.title```, ```category.anem```, ```actor.first_name``` and ```actor.last_name```. 
+Based on the ERD above, the key columns we will need to use for table joins are: ```rental.customer_id```, ```flim.title```, ```category.name```, ```actor.first_name``` and ```actor.last_name```. 
 
 ## 🧲 Join Implementation
 
