@@ -25,11 +25,9 @@ The following email template has been shared to us by the marketing team at DVD 
 </p>
 
 ### Requirement 1
-#### Top 2 Categories
 For each customer, we need to identify the top 2 categories for each customer based off their past rental history. These top categories will drive marketing creative images as seen in the travel and sci-fi examples in the draft email.
 
 ### Requirement 2
-#### Category Film Recommendations
 The marketing team has also requested for the 3 most popular films for each customer’s top 2 categories.
 
 There is a catch though - we cannot recommend a film which the customer has already viewed.
