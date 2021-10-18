@@ -46,7 +46,19 @@ https://github.com/eluah/marketing-analytics-case-study/blob/main/Data%20Explora
 
 ## 📌 Data Analysis
 
-Based on the ERD above, the key columns we will need to use for table joins are: ```rental.customer_id```, ```flim.title```, ```category.name```, ```actor.first_name``` and ```actor.last_name```. 
+Based on the ERD above, the key columns we will need to generate each customer insight for answering questions are:
+  * **```category_name```**: The name of the top 2 ranking categories
+  * **```rental_count```**: How many total films have they watched in this category?
+  * **```average_comparison```**: How many more films has the customer watched compared to the average DVD Rental Co customer?
+  * **```percentile```**: How does the customer rank in terms of the top X% compared to all other customers in this film category?
+  * **```category_percentage```**: What proportion of each customer’s total films watched does this count make?
+
+## Identifying Start & End Points
+
+In order to generate results required to calculate **```rental_count```** at a **```customer_id```** level, the following information are needed:
+  * **```customer_id```**
+  * **```category_name```**
+
 
 ## 🧲 Join Implementation
 
