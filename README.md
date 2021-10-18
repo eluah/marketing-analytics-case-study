@@ -53,12 +53,28 @@ Based on the ERD above, the key columns we will need to generate each customer i
   * **```percentile```**: How does the customer rank in terms of the top X% compared to all other customers in this film category?
   * **```category_percentage```**: What proportion of each customer’s total films watched does this count make?
 
-## Identifying Start & End Points
+### Identifying Start & End Points
 
 In order to generate results required to calculate **```rental_count```** at a **```customer_id```** level, the following information are needed:
   * **```customer_id```**
   * **```category_name```**
+First we realise that we need to start with the ```dvd_rentals.rental``` table as it is the only place where our customer_id field exists - it’s the only place where we can identify how many films a customer has watched.
 
+The end is to  link the records in the ```dvd_rentals.rental``` table to the ```dvd_rentals.category``` table to obtain ```category_name```.
+
+### Mapping the join journey
+Starting with our ```dvd_rentals.rental``` table we can see that we do indeed have the ```customer_id``` as well as addition columns - but there is no ```category_name``` in sight, in fact we are very far away!
+
+After inspecting the ERD - we need to get from table 1 ```dvd_rentals.rental``` all the way through to table number 5 ```dvd_rentals.category``` using the blue lines. 
+
+Below is the final 4 part table joining journey itinerary:
+
+|Join Journey Part|Start              |End                |Foreign Key       |
+|-----------------|-------------------|-------------------|------------------|
+|**Part 1**       |```rental```       |```inventory```    |```inventory_id```|
+|**Part 2**       |```inventory```    |```film```         |```film_id```     |
+|**Part 3**       |```film```         |```film_category```|```film_id```     |
+|**Part 4**       |```film_category```|```category```     |```category_id``` |
 
 ## 🧲 Join Implementation
 
