@@ -12,6 +12,7 @@ Based on the ERD above, the key columns we will need to generate each customer i
 In order to generate results required to calculate **```rental_count```** at a **```customer_id```** level, the following information are needed:
   * **```customer_id```**
   * **```category_name```**
+  * 
 First we realise that we need to start with the ```dvd_rentals.rental``` table as it is the only place where our customer_id field exists - it’s the only place where we can identify how many films a customer has watched.
 
 The end is to  link the records in the ```dvd_rentals.rental``` table to the ```dvd_rentals.category``` table to obtain ```category_name```.
@@ -45,4 +46,13 @@ However there is a catch with our ```dvd_rentals.rental``` table - all the table
 When we look through the other tables in the ERD - we can notice the ```inventory``` table which can be used to help us get the ```film_id``` column for each rental.
 
 Thus to answer Question 1, **we need to keep all of the customer rental records from ```dvd_rentals.rental``` and match up each record with its equivalent ```film_id``` value from the ```dvd_rentals.inventory``` table.** 
+
+
+
+## Question 2
+
+
+
+## Question 3
+
 
