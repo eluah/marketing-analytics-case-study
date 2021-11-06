@@ -53,28 +53,41 @@ Based on the ERD above, the key columns we will need to generate each customer i
   * **```percentile```**: How does the customer rank in terms of the top X% compared to all other customers in this film category?
   * **```category_percentage```**: What proportion of each customer’s total films watched does this count make?
 
-### Identifying Start & End Points
+In summary, we have now successfully answered all 3 questions for table join:
 
-In order to generate results required to calculate **```rental_count```** at a **```customer_id```** level, the following information are needed:
-  * **```customer_id```**
-  * **```category_name```**
-First we realise that we need to start with the ```dvd_rentals.rental``` table as it is the only place where our customer_id field exists - it’s the only place where we can identify how many films a customer has watched.
+**1. What is the purpose of joining these two tables?**
 
-The end is to  link the records in the ```dvd_rentals.rental``` table to the ```dvd_rentals.category``` table to obtain ```category_name```.
+> I need to keep all of the customer rental records from **```dvd_rentals.rental```** and match up each record with its equivalent **```film_id```** value from the **```dvd_rentals.inventory```** table.
 
-### Mapping the join journey
-Starting with our ```dvd_rentals.rental``` table we can see that we do indeed have the ```customer_id``` as well as addition columns - but there is no ```category_name``` in sight, in fact we are very far away!
+**2. What is the distribution of foreign keys within each table?**
+> There is a **1-to-many relationship** between the **```inventory_id```** and the rows of the **```dvd_rentals.rental```** table
 
-After inspecting the ERD - we need to get from table 1 ```dvd_rentals.rental``` all the way through to table number 5 ```dvd_rentals.category``` using the blue lines. 
+|row_counts|count_of_fk_values|
+|----------|------------------|
+|1         |4                 |
+|2         |1126              |
+|3         |1151              |
+|4         |1160              |
+|5         |1139              |
 
-Below is the final 4 part table joining journey itinerary:
+ <br /> 
 
-|Join Journey Part|Start              |End                |Foreign Key       |
-|-----------------|-------------------|-------------------|------------------|
-|**Part 1**       |```rental```       |```inventory```    |```inventory_id```|
-|**Part 2**       |```inventory```    |```film```         |```film_id```     |
-|**Part 3**       |```film```         |```film_category```|```film_id```     |
-|**Part 4**       |```film_category```|```category```     |```category_id``` |
+> There is a **1-to-1 relationship** between the **```inventory_id```** and the rows of the **```dvd_rentals.inventory```** table
+
+|row_counts|count_of_fk_values|
+|----------|------------------|
+|1         |4581              |
+
+ <br /> 
+
+**3. How many unique foreign key values exist in each table?**
+
+All of the foreign key values in **```dvd_rentals.rental```** exist in **```dvd_rentals.inventory```** and only 1 record **```inventory_id```** = 5 exists only in the **```dvd_rentals.inventory```** table.
+
+There is an overlap of **4,580 unique** **```inventory_id```** **foreign key values** which will exist after the join is complete.
+
+### Click to view 👇:
+https://github.com/eluah/marketing-analytics-case-study/edit/main/Data%20Analysis/README.MD
 
 ## 🧲 Join Implementation
 
