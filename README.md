@@ -87,7 +87,7 @@ All of the foreign key values in **```dvd_rentals.rental```** exist in **```dvd_
 There is an overlap of **4,580 unique** **```inventory_id```** **foreign key values** which will exist after the join is complete.
 
 ### Click to view 👇:
-https://github.com/eluah/marketing-analytics-case-study/blob/main/Data%20Exploration/README.MD
+https://github.com/eluah/marketing-analytics-case-study/blob/main/Data%20Analysis/README.MD
 
 ## 🧲 Join Implementation
 
