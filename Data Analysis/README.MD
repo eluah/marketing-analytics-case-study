@@ -47,12 +47,277 @@ When we look through the other tables in the ERD - we can notice the ```inventor
 
 Thus to answer Question 1, **we need to keep all of the customer rental records from ```dvd_rentals.rental``` and match up each record with its equivalent ```film_id``` value from the ```dvd_rentals.inventory``` table.** 
 
+We can think of the deeper purpose of this join between the two tables in the following way:
 
+> We need to keep all of the customer rental records from dvd_rentals.rental and match up each record with its equivalent film_id value from the dvd_rentals.inventory table.
+
+Now we need to decide whether to use a left or inner join?
+
+Now here is where things could get tricky, as there are a few unknowns that we need to address as we are matching the inventory_id foreign key between the rental and inventory tables.
+
+1. How many records exist per inventory_id value in rental or inventory tables?
+2. How many overlapping and missing unique foreign key values are there between the two tables?
+
+The same questions can be used for all scenarios and is not just limited to this specific table join!
+
+> 1. How many records exist per foreign key value in left and right tables?
+> 2. How many overlapping and missing unique foreign key values are there between the two tables?
+
+Since we know that the ```rental``` table contains every single rental for each customer - it makes sense logically that each valid rental record in the rental table should have a relevant ```inventory_id``` record as people need to physically hire some item in the store.
+
+Additionally - it also makes sense that a specific item might be rented out by multiple customers at different times as customers return the DVD as shown by the ```return_date``` column in the dataset.
+
+Now when we think about the ```inventory``` table - it should follow that every item should have a unique ```inventory_id``` but there may also be multiple copies of a specific film.
+
+From these 2 key pieces of real life insight - we can generate some hypotheses about our 2 datasets.
+
+1. The number of unique ```inventory_id``` records will be equal in both ```dvd_rentals.rental``` and ```dvd_rentals.inventory``` tables
+2. There will be a multiple records per unique ```inventory_id``` in the ```dvd_rentals.rental``` table
+3. There will be multiple ```inventory_id``` records per unique ```film_id``` value in the ```dvd_rentals.inventory``` table
+
+Let’s start using SQL to validate those 3 hypotheses.
+
+> H1: The number of unique ```inventory_id``` records will be equal in both ```dvd_rentals.rental``` and ```dvd_rentals.inventory``` tables
+
+We can quickly use distinct counts on inventory_id for both tables to quickly validate this assumption.
+
+```sql
+(
+SELECT
+  'rental table' AS table_name,
+  COUNT(DISTINCT inventory_id)
+FROM dvd_rentals.rental
+)
+UNION
+(
+SELECT
+  'inventory table' AS table_name,
+  COUNT(DISTINCT inventory_id)
+FROM dvd_rentals.inventory
+);
+```
+
+|table_name|count|
+|----------|-----|
+|inventory table|4581 |
+|rental table|4580 |
+
+**FINDING**: 
+
+There seems to be 1 additional **```inventory_id```** value in the **```dvd_rentals.inventory```** table compared to the **```dvd_rentals.rental```** table
+
+This warrants further investigation but it seems to invalidate our first hypothesis - which is exactly what we are after!
+
+> H2: There will be a multiple records per unique ```inventory_id``` in the ```dvd_rentals.rental``` table
+
+A simple group by count with an additional summary group by will do to check this hypothesis.
+
+We follow these 2 simple steps to summarise our dataset:
+
+1. Perform a ```GROUP BY``` record count on the target column
+2. Summarise the record count output to show the distribution of records by unique count of the target column
+
+The target column in this case is our ```inventory_id``` field.
+
+```sql
+-- first generate group by counts on the target_column_values column
+WITH counts_base AS (
+SELECT
+  inventory_id AS target_column_values,
+  COUNT(*) AS row_counts
+FROM dvd_rentals.rental
+GROUP BY target_column_values
+)
+-- summarize the group by counts above by grouping again on the row_counts from counts_base CTE part
+SELECT
+  row_counts,
+  COUNT(target_column_values) as count_of_target_values
+FROM counts_base
+GROUP BY row_counts
+ORDER BY row_counts;
+```
+
+|row_counts|count_of_target_values|
+|----------|----------------------|
+|1         |4                     |
+|2         |1126                  |
+|3         |1151                  |
+|4         |1160                  |
+|5         |1139                  |
+
+**Findings**
+
+We can indeed confirm that there are multiple rows per inventory_id value in our dvd_rentals.rental table.
+
+> H3: There will be multiple ```inventory_id``` records per unique ```film_id``` value in the ```dvd_rentals.inventory``` table
+
+We can use this same approach as hypothesis 2 but instead of groupinng on the ```inventory_id``` - we will instead group on the ```film_id``` column and perform a count distinct on the ```inventory_id``` before summarizing the outputs. 
+
+```sql
+-- first generate group by counts on the target_column_values column
+WITH counts_base AS (
+SELECT
+  film_id AS target_column_values,
+  COUNT(DISTINCT inventory_id) AS unique_record_counts
+FROM dvd_rentals.inventory
+GROUP BY target_column_values
+)
+-- summarize the group by counts above by grouping again on the row_counts from counts_base CTE part
+SELECT
+  unique_record_counts,
+  COUNT(target_column_values) AS count_of_target_values
+FROM counts_base
+GROUP BY unique_record_counts
+ORDER BY unique_record_counts;
+```
+
+|row_counts|count_of_target_values|
+|----------|----------------------|
+|2         |133                   |
+|3         |131                   |
+|4         |183                   |
+|5         |136                   |
+|6         |187                   |
+|7         |116                   |
+|8         |72                    |
+
+**Findings**
+
+We can confirm that there are indeed multiple unique ```inventory_id``` per ```film_id``` value in the ```dvd_rentals.inventory``` table.
 
 ## Question 2
 
+> What is **the distribution of foreign keys** within each table?
 
+One of the first places to start inspecting our datasets is to look at the distribution of foreign key values in each rental and inventory table used for our join.
+
+The distribution and relationship within the table by the foreign keys is super important because it helps us inspect what our table joining inputs consist of and also determines what sort of outputs we should expect after joining.
+
+```rental``` distribution analysis on ```inventory_id``` foreign key
+
+```sql
+-- first generate group by counts on the foreign_key_values column
+WITH counts_base AS (
+SELECT
+  inventory_id AS foreign_key_values,
+  COUNT(*) AS row_counts
+FROM dvd_rentals.rental
+GROUP BY foreign_key_values
+)
+-- summarize the group by counts above by grouping again on the row_counts from counts_base CTE part
+SELECT
+  row_counts,
+  COUNT(foreign_key_values) as count_of_foreign_keys
+FROM counts_base
+GROUP BY row_counts
+ORDER BY row_counts;
+```
+
+|row_counts|count_of_foreign_keys|
+|----------|---------------------|
+|1         |4                    |
+|2         |1126                 |
+|3         |1151                 |
+|4         |1160                 |
+|5         |1139                 |
+
+```inventory``` distribution analysis on ```inventory_id``` foreign key
+
+```sql
+WITH counts_base AS (
+SELECT
+  inventory_id AS foreign_key_values,
+  COUNT(*) AS row_counts
+FROM dvd_rentals.inventory
+GROUP BY foreign_key_values
+)
+SELECT
+  row_counts,
+  COUNT(foreign_key_values) as count_of_foreign_keys
+FROM counts_base
+GROUP BY row_counts
+ORDER BY row_counts;
+```
+
+|row_counts|count_of_foreign_keys|
+|----------|---------------------|
+|1         |4581                 |
+
+**Findings**
+
+We can see in the rental table - there exists different multiple row counts for some values of the foreign keys - this is not unexpected, in fact we did exactly the same analysis previously to validate our first data hypothesis!
+
+To break it down - we can see that 4 of our foreign key values (the ```inventory_id``` in this case) will have only a single row in the rental_table.
+
+Additionally in the rental table - there are 1,126 ```inventory_id``` values which exist in 2 different rows and 1,151 in 3 different rows and so on.
+
+This can also be referred to as a a 1-to-many relationship for the ```inventory_id``` in this rental table, or in other words - there may exist 1 or more record for each unique ```inventory_id``` value in this table.
 
 ## Question 3
 
+> How many **unique foreign key values** exist in each table?
+
+Since the ```dvd_rentals.rental``` table is the only table in our ERD which has ```customer_id``` as a column - we would like to keep all of the records from this table. 
+
+We will employ the anti join or a WHERE NOT EXISTS to obtain the following foreign key details:
+
+1. Which foreign keys only exist in the left table?
+2. Which foreign keys only exist in the right table?
+
+Firstly - let’s count how many unique keys are in both (1) and (2):
+
+```sql
+-- how many foreign keys only exist in the left table and not in the right?
+SELECT
+  COUNT(DISTINCT rental.inventory_id)
+FROM dvd_rentals.rental
+WHERE NOT EXISTS (
+  SELECT inventory_id
+  FROM dvd_rentals.inventory
+  WHERE rental.inventory_id = inventory.inventory_id
+);
+```
+
+|count|
+|-----|
+|0    | 
+
+Great we can confirm that there are no inventory_id records which appear in the dvd_rentals.rental table which does not appear in the dvd_rentals.inventory table.
+
+Now onto the right side table:
+
+```sql
+-- how many foreign keys only exist in the right table and not in the left?
+-- note the table reference changes
+SELECT
+  COUNT(DISTINCT inventory.inventory_id)
+FROM dvd_rentals.inventory
+WHERE NOT EXISTS (
+  SELECT inventory_id
+  FROM dvd_rentals.rental
+  WHERE rental.inventory_id = inventory.inventory_id
+);
+```
+
+|count|
+|-----|
+|1    | 
+
+Ok - we’ve spotted a single inventory_id record. Let’s inspect further:
+
+```sql
+SELECT *
+FROM dvd_rentals.inventory
+WHERE NOT EXISTS (
+  SELECT inventory_id
+  FROM dvd_rentals.rental
+  WHERE rental.inventory_id = inventory.inventory_id
+);
+```
+
+|inventory_id|film_id|store_id|last_update             |
+|------------|-------|--------|------------------------|
+|5           |1      |2       |2006-02-15T05:09:17.000Z|
+
+This is linked to a specific film record which could be rented out by a customer. One such reason for this odd record could be that this specific rental inventory unit was never rented out by a customer. 
 
