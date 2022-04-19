@@ -321,3 +321,83 @@ WHERE NOT EXISTS (
 
 This is linked to a specific film record which could be rented out by a customer. One such reason for this odd record could be that this specific rental inventory unit was never rented out by a customer. 
 
+**Joint Foreign Keys**
+
+Since we already identified that 0 of the foreign key values in the ```dvd_rentals.rental``` do not exist in the ```dvd_rentals.inventory``` table - or in other words - all of the ```inventory_id``` values which exist in ```dvd_rentals.rental``` table also exists in the ```dvd_rentals.inventory``` dataset - we can now redraw our venn diagram from before with a representation of what our exact data looks like.
+
+<p align="center">
+    <img src="https://github.com/eluah/marketing-analytics-case-study/blob/main/img/Venn-Diagram.png" alt=venn>
+</p> 
+
+We can quickly perform a left semi join or a WHERE EXISTS to get the count of unique foreign key values that are in the intersection.
+
+```sql
+SELECT
+  COUNT(DISTINCT rental.inventory_id)
+FROM dvd_rentals.rental
+WHERE EXISTS (
+  SELECT inventory_id
+  FROM dvd_rentals.inventory
+  WHERE rental.inventory_id = inventory.inventory_id
+);
+```
+
+|count|
+|-----|
+|4580 |
+
+**Implementing the Join(s)**
+
+After performing this analysis we can conclude there is in fact no difference between running a LEFT JOIN or an INNER JOIN in our example!
+
+We can finally implement our joins and prove this is the case by inspecting the raw row counts from the resulting join outputs.
+
+Let’s also confirm that the unique inventory_id records are the same too.
+
+```sql
+DROP TABLE IF EXISTS left_rental_join;
+CREATE TEMP TABLE left_rental_join AS
+SELECT
+  rental.customer_id,
+  rental.inventory_id,
+  inventory.film_id
+FROM dvd_rentals.rental
+LEFT JOIN dvd_rentals.inventory
+  ON rental.inventory_id = inventory.inventory_id;
+
+DROP TABLE IF EXISTS inner_rental_join;
+CREATE TEMP TABLE inner_rental_join AS
+SELECT
+  rental.customer_id,
+  rental.inventory_id,
+  inventory.film_id
+FROM dvd_rentals.rental
+INNER JOIN dvd_rentals.inventory
+  ON rental.inventory_id = inventory.inventory_id;
+
+-- check the counts for each output (bonus UNION usage)
+-- note that these parantheses are not really required but it makes
+-- the code look and read a bit nicer!
+(
+  SELECT
+    'left join' AS join_type,
+    COUNT(*) AS record_count,
+    COUNT(DISTINCT inventory_id) AS unique_key_values
+  FROM left_rental_join
+)
+UNION
+(
+  SELECT
+    'inner join' AS join_type,
+    COUNT(*) AS record_count,
+    COUNT(DISTINCT inventory_id) AS unique_key_values
+  FROM inner_rental_join
+);
+```
+
+|join_type|record_count|unique_key_values|
+|---------|------------|-----------------|
+|inner join|16044       |4580             |
+|left join|16044       |4580             |
+
+Great! In this example - we can indeed confirm that there is no difference between an inner join or left join for our datasets!
