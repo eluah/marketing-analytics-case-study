@@ -93,8 +93,15 @@ https://github.com/eluah/marketing-analytics-case-study/blob/main/Data%20Analysi
 
 Next, we start implementing the table joins which will then help us to start the problem solving. From the analysis section, we have come to conclusion to the following join table sequence.
 
-### Click to view 👇:
+| Join Journey Part | Start               |  End                |  Foreign Key       |
+|-------------------|---------------------|---------------------|--------------------|
+| Part 1            | ```rental```        | ```inventory```     | ```inventory_id``` |
+| Part 2            | ```inventory```     | ```film```          | ```film_id```      |
+| Part 3            | ```film```          | ```film_category``` | ```film_id```      |
+| Part 4            | ```film_category``` | ```category```      | ```category_id```  |
 
+### Click to view 👇:
+https://github.com/eluah/marketing-analytics-case-study/blob/main/Join%20Implementation/README.MD
 
 ## 💥 Problem Solving
 
