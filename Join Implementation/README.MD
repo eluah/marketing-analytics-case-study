@@ -30,7 +30,7 @@ b. There should be 1-to-1 relationship for ```film_id``` and the rows of the ```
 
 > 3. How can we validate these assumptions?
 
-Now we test the assunmptions, by generating the row counts for ```film_id``` for both the ```dvd_rentals.inventory``` and ```dvd_rentals.film``` tables
+Now we test the assumptions, by generating the row counts for ```film_id``` for both the ```dvd_rentals.inventory``` and ```dvd_rentals.film``` tables
 
 Let’s use a summarized group by with a CTE for the dvd_rentals.inventory table:
 
@@ -63,3 +63,28 @@ ORDER BY record_count;
 | 7            | 116                   |
 | 8            | 72                    |
 
+The first assumption is true as we have a 1-to-many relationship for the ```film_id``` foreign key in our ```dvd_rentals.inventory_table```. 
+
+Next we check our second assumption, we can just do a group by on the ```film_id``` and sort it in descending order to check if there's just one row per unique ```film_id``` or not.
+
+```sql
+SELECT
+  film_id,
+  COUNT(*) AS film_count
+FROM dvd_rentals.film
+GROUP BY film_id
+ORDER BY film_id DESC
+LIMIT 5;
+```
+
+*Output:*
+
+| film_id | film_count |
+|---------|------------|
+| 1000    | 1          |
+| 999     | 1          |
+| 998     | 1          |
+| 997     | 1          |
+| 996     | 1          |
+
+Thus, we can confirm that there is one-to-one relationship for ```film_id``` in the ```film``` table.
