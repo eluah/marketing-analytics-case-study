@@ -19,11 +19,13 @@ Next I look at the table joining journey.
 Let's go through the checklist one by one.
 
 > 1. What is the purpose of joining these two tables?
+
 We want to match the films on ```film_id``` to obtain the title of each film.
 
 > 2. What contextual hypotheses do we have about the data?
 
 a. There be 1-to-many relationship for ```film_id``` and the rows of the ```dvd_rentals.inventory``` table as one specific film might have multiple copies to be purchased at the rental store.
+
 b. There should be 1-to-1 relationship for ```film_id``` and the rows of the ```dvd_rentals.film``` table as it doesn’t make sense for there to be duplicates in this ```dvd_rentals.film```.
 
 > 3. How can we validate these assumptions?
@@ -31,4 +33,33 @@ b. There should be 1-to-1 relationship for ```film_id``` and the rows of the ```
 Now we test the assunmptions, by generating the row counts for ```film_id``` for both the ```dvd_rentals.inventory``` and ```dvd_rentals.film``` tables
 
 Let’s use a summarized group by with a CTE for the dvd_rentals.inventory table:
+
+```sql
+WITH base_counts AS (
+  SELECT 
+    film_id,
+    COUNT(*) AS record_count
+  FROM dvd_rentals.inventory
+  GROUP BY 1
+)
+
+SELECT 
+  record_count,
+  COUNT(DISTINCT film_id) AS unique_film_id_values
+FROM base_counts
+GROUP BY record_count
+ORDER BY record_count;
+```
+
+*Output:*
+
+| record_count | unique_film_id_values |
+|--------------|-----------------------|
+| 2            | 133                   |
+| 3            | 131                   |
+| 4            | 183                   |
+| 5            | 136                   |
+| 6            | 187                   |
+| 7            | 116                   |
+| 8            | 72                    |
 
